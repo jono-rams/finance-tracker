@@ -1,4 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 // pages
 import Home from "./pages/home/Home";
@@ -9,6 +10,8 @@ import Signup from "./pages/signup/Signup";
 import Navbar from "./components/Navbar";
 
 function App() {
+  const { authIsReady } = useAuthContext();
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Navbar />}>
@@ -21,7 +24,7 @@ function App() {
 
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      {authIsReady && <RouterProvider router={router} />}
     </div>
   );
 }
