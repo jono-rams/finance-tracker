@@ -1,9 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { firebaseAuth } from "../firebase/config"
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
+  const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(null);
   const { dispatch } = useAuthContext();
@@ -26,20 +27,29 @@ export const useSignup = () => {
       // dispatch login action
       dispatch({ type: 'LOGIN', payload: res.user });
 
-      setIsPending(false);
-      setError(null);
-
+      // update state
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(null);
+      }
     } catch (error) {
-      console.error(error.message);
-      setError(error.message);
-      setIsPending(false);
+      if (!isCancelled) {
+        console.error(error.message);
+        setError(error.message);
+        setIsPending(false);
+      }
     }
   };
+
+  useEffect(() => {
+    return () => setIsCancelled(true);
+  }, [])
 
   return { error, isPending, signup }
 }
 
 export const useLogout = () => {
+  const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(null);
   const { dispatch } = useAuthContext();
@@ -55,15 +65,23 @@ export const useLogout = () => {
       // dispatch logout action
       dispatch({ type: 'LOGOUT' });
 
-      setIsPending(false);
-      setError(null);
-      
+      // update state
+      if (!isCancelled) {
+        setIsPending(false);
+        setError(null);
+      }      
     } catch (error) {
-      console.error(error.message);
-      setError(error.message);
-      setIsPending(false);
+      if (!isCancelled) {
+        console.error(error.message);
+        setError(error.message);
+        setIsPending(false);
+      }
     }
   }
+
+  useEffect(() => {
+    return () => setIsCancelled(true);
+  }, [])
 
   return { error, isPending, logout }
 }
