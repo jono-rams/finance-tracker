@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSignup } from '../../hooks/authentication';
 
 // styles
 import styles from './Signup.module.css'
@@ -7,13 +8,11 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signup, isPending, error } = useSignup();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: implement signup logic using Firebase Auth
-    console.log('Display Name:', displayName);
-    console.log('Email:', email);
-    console.log('Password:', password);
+    signup(email, password, displayName);
   }
 
   return (
@@ -46,7 +45,9 @@ export default function Signup() {
           required
         />
       </label>
-      <button className='btn'>Signup</button>
+      {!isPending && <button className='btn'>Signup</button>}
+      {isPending && <button className='btn' disabled>loading</button>}
+      {error && <p className={styles.error}>{error}</p>}
     </form>
   )
 }
