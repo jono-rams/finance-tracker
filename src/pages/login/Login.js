@@ -2,16 +2,16 @@ import { useState } from 'react'
 
 // styles
 import styles from './Login.module.css'
+import { useLogin } from '../../hooks/authentication';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {login, isPending, error} = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: implement login logic using Firebase Auth
-    console.log('Email:', email);
-    console.log('Password:', password);
+    login(email, password);
   }
 
   return (
@@ -35,7 +35,9 @@ export default function Login() {
           required
         />
       </label>
-      <button className='btn'>Login</button>
+      {!isPending && <button className='btn'>Login</button>}
+      {isPending && <button className='btn' disabled>loading</button>}
+      {error && <p className={styles.error}>{error}</p>}
     </form>
   )
 }
