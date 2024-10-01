@@ -17,3 +17,9 @@
   color: #777;
   width: 100%;
 }
+
+.error {
+  margin-top: 10px;
+  color: crimson !important;
+  font-weight: bolder !important;
+}
