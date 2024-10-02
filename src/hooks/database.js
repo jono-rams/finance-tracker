@@ -84,16 +84,16 @@ export const useCollection = (_collectionName, _query, _orderBy) => {
   const orderByRef = useRef(_orderBy).current;
 
   useEffect(() => {
-    let q = query(collection(firestoreDatabase, collectionName));
+    let ref = query(collection(firestoreDatabase, collectionName));
 
     if (queryRef) {
-      q = query(q, where(...queryRef));
+      ref = query(ref, where(...queryRef));
     }
     if (orderByRef) {
-      q = query(q, orderBy(...orderByRef));
+      ref = query(ref, orderBy(...orderByRef));
     }
 
-    const unsubscribe = onSnapshot(q, snapshot => {
+    const unsubscribe = onSnapshot(ref, snapshot => {
       let results = []
       snapshot.docs.forEach(doc => {
         results.push({ ...doc.data(), id: doc.id });
