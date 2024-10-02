@@ -13,7 +13,6 @@ export default function TransactionForm({ uid }) {
 
   // reset the form fields
   useEffect(() => {
-    console.log('res', response.success);
     if (response.success) {
       setName('')
       setAmount('')
