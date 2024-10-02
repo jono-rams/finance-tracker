@@ -73,18 +73,17 @@ export const useFirestore = (collectionName) => {
   return { response, addDocument, deleteDocument };
 }
 
-export const useCollection = (_collectionName, _query, _orderBy) => {
+export const useCollection = (_collection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null);
   const [error, setError] = useState(null);
 
   // if we don't use a ref --> infinite loop in useEffect
   // _query is an array and is "different" on every function call
-  const collectionName = useRef(_collectionName).current;
   const queryRef = useRef(_query).current;
   const orderByRef = useRef(_orderBy).current;
 
   useEffect(() => {
-    let ref = query(collection(firestoreDatabase, collectionName));
+    let ref = query(collection(firestoreDatabase, _collection));
 
     if (queryRef) {
       ref = query(ref, where(...queryRef));
@@ -110,7 +109,7 @@ export const useCollection = (_collectionName, _query, _orderBy) => {
     // unsubscribe on unmount
     return () => unsubscribe();
 
-  }, [collectionName, queryRef, orderByRef])
+  }, [_collection, queryRef, orderByRef])
 
   return { documents, error }
 }
